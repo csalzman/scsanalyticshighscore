@@ -32,7 +32,9 @@ app.use(bodyParser.json());
 //Testing Curl request
 // curl -X POST http://localhost:8080/bugdrop/completed -H "Content-type: application/json" -d '{"woo":"1"}'
 app.post('/bugdrop/completed', function (req, res) { 
+	console.log("Post request from: " + req.ip);
 	console.log(req.body);
+	
 	res.send("The server would like to thank you.\nResponse sent: " + new Date());
 });
 
