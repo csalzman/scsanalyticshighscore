@@ -18,7 +18,7 @@ dbConnection.connect((err) => {
 });
 
 app.get('/', function (req, res) { 
-	var woo = dbConnection.query('SELECT * FROM level_test', function(err, result, fields) {
+	var woo = dbConnection.query('SELECT * FROM level_test', function (err, result, fields) {
 		if(err) {
 			throw err;
 		}
@@ -30,11 +30,31 @@ app.get('/', function (req, res) {
 app.use(bodyParser.json());
 
 //Testing Curl request
-// curl -X POST http://localhost:8080/bugdrop/completed -H "Content-type: application/json" -d '{"woo":"1"}'
+//curl -X POST http://localhost:8080/bugdrop/completed -H "Content-type: application/json" -d '{"playerID": "123123","levelName":"Woo", "completionTime":"10.5", "collectables":"5", "attemptNum":"3"}'
 app.post('/bugdrop/completed', function (req, res) { 
 	console.log("Post request from: " + req.ip);
-	console.log(req.body);
-	
+
+	const requestJson = req.body;
+	//Check that the json request contains what we think it should
+	if(
+		requestJson.playerID != null &&
+		requestJson.levelName != null &&
+		requestJson.completionTime != null &&
+		requestJson.collectables != null &&
+		requestJson.attemptNum != null
+	)
+	{
+		console.log("Good, got it");	
+		
+		dbConnection.query(
+			'INSERT INTO level_test SET playerID = ?, completionTime =  ?, collectables = ?, attemptNum = ?',
+			[requestJson.playerID, requestJson.completionTime, requestJson.collectables, requestJson.attemptNum]
+		 );
+	}	
+	else {
+		console.log("missing information. try again");
+	}
+
 	res.send("The server would like to thank you.\nResponse sent: " + new Date());
 });
 
