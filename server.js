@@ -17,12 +17,11 @@ dbConnection.connect((err) => {
 	console.log('connected');
 });
 
-app.get('/', function (req, res) { 
+app.get('/bugdrop/completed', function (req, res) { 
 	var woo = dbConnection.query('SELECT * FROM level_test', function (err, result, fields) {
 		if(err) {
 			throw err;
 		}
-		console.log(result);
 		res.send(result);
 	});
 });
@@ -42,20 +41,22 @@ app.post('/bugdrop/completed', function (req, res) {
 		requestJson.completionTime != null &&
 		requestJson.collectables != null &&
 		requestJson.attemptNum != null
-	)
-	{
-		console.log("Good, got it");	
-		
+	) {
 		dbConnection.query(
 			'INSERT INTO level_test SET playerID = ?, completionTime =  ?, collectables = ?, attemptNum = ?',
-			[requestJson.playerID, requestJson.completionTime, requestJson.collectables, requestJson.attemptNum]
+			[requestJson.playerID, requestJson.completionTime, requestJson.collectables, requestJson.attemptNum],
+			function (error, results, fields) {
+				if(error) throw error;
+				
+				console.log("Added with ID: " + results.insertId);
+			}
 		 );
+		
+		res.send("The server would like to thank you.\nResponse sent: " + new Date());
 	}	
 	else {
-		console.log("missing information. try again");
+		res.send("Problem with your request. Missing fields");
 	}
-
-	res.send("The server would like to thank you.\nResponse sent: " + new Date());
 });
 
 app.listen(port, () => console.log(`Example app listening on port ${port}`));
