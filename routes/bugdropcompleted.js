@@ -1,22 +1,13 @@
-//Bug Drop Completed Routes
+//Route for: bugdrop/completed 
 const express = require('express');
 const router = express.Router();
+
+//Database connection
+const db = require('../db.js');
 
 //bodyParser middleware so we can quickly get the body of the request
 const bodyParser = require('body-parser');
 router.use(bodyParser.json());
-
-//Database setup
-const mysql = require('mysql');
-const db = require('../db.js');
-const dbConnection = mysql.createConnection(db.dbSettings);
-
-dbConnection.connect((err) => {
-	if(err) {
-		throw err;
-	}
-	console.log('connected');
-});
 
 /* Testing Curl request: 
 curl -X POST http://localhost:8080/bugdrop/completed -H "Content-type: application/json" -d '{"playerID": "123123","levelName":"Woo", "completionTime":"10.5", "collectables":"5", "attemptNum":"3"}'
@@ -24,8 +15,9 @@ curl -X POST http://localhost:8080/bugdrop/completed -H "Content-type: applicati
 //Posts row 
 router.post('/', function (req, res) { 
 	console.log("Post request from: " + req.ip);
-
-	const requestJson = req.body;
+    
+    const requestJson = req.body;
+    
 	//Check that the json request contains what we think it should
 	if(
 		requestJson.playerID != null &&
@@ -34,12 +26,11 @@ router.post('/', function (req, res) {
 		requestJson.collectables != null &&
 		requestJson.attemptNum != null
 	) {
-		dbConnection.query(
+		db.query(
 			'INSERT INTO level_test SET playerID = ?, completionTime =  ?, collectables = ?, attemptNum = ?',
 			[requestJson.playerID, requestJson.completionTime, requestJson.collectables, requestJson.attemptNum],
 			function (error, results, fields) {
-				if(error) throw error;
-				
+				if(error) throw error;		
 				console.log("Added with ID: " + results.insertId);
 			}
 		 );
@@ -51,12 +42,10 @@ router.post('/', function (req, res) {
 	}
 });
 
-//Display our data
+//Display all data
 router.get('/', function (req, res) { 
-	dbConnection.query('SELECT * FROM level_test', function (err, result, fields) {
-		if(err) {
-			throw err;
-		}
+	db.query('SELECT * FROM level_test', function (err, result, fields) {
+		if(err) throw err;
 		res.send(result);
 	});
 });
