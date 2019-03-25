@@ -11,6 +11,16 @@ if(process.env.NODE_ENV == "local") {
 	};
 }
 
+//At the moment these are the same. Keep them separate in case we need to adjust into the future
+if(process.env.NODE_ENV == "production") {
+	dbSettings = { 
+		host: 'localhost',
+		user: process.env.DBUSERNAME,
+		password: process.env.PASSWORD, 
+		database: process.env.DATABASE 
+	};
+}
+
 //Create connection
 const dbConnection = mysql.createConnection(dbSettings);
 

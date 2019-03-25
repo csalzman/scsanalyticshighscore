@@ -13,7 +13,7 @@ router.use(bodyParser.json());
 curl -X POST http://localhost:8080/bugdrop/completed -H "Content-type: application/json" -d '{"playerID": "123123","levelName":"Woo", "completionTime":"10.5", "collectables":"5", "attemptNum":"3"}'
 */
 //Posts row 
-router.post('/', function (req, res) { 
+router.post('/completed', function (req, res) { 
 	console.log("Post request from: " + req.ip);
     
     const requestJson = req.body;
@@ -43,7 +43,7 @@ router.post('/', function (req, res) {
 });
 
 //Display all data
-router.get('/', function (req, res) { 
+router.get('/completed', function (req, res) { 
 	db.query('SELECT * FROM level_test', function (err, result, fields) {
 		if(err) throw err;
 		res.send(result);
