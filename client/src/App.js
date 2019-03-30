@@ -42,7 +42,7 @@ class App extends Component {
             <th>Player ID</th>
             <th>Completion Time</th>
             <th>Attempt Number</th>
-            <th>Collectabels</th>
+            <th>Collectables</th>
           </tr>
         </thead>
         <tbody>
