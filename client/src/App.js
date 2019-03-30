@@ -16,7 +16,7 @@ class App extends Component {
 
     fetch('/bugdrop/completed')
       .then(response => response.json())
-      .then(data => this.setState({ isLoading:false, data:data }))
+      .then(data => this.setState({ isLoading:false, data }))
       .catch(error => this.setState({ isLoading:false, error }));
   };
 
