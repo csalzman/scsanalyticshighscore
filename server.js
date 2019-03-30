@@ -5,7 +5,9 @@ require('dotenv').config();
 const express = require('express');
 const router = express.Router();
 
+//Path needed to reference filesystem
 const path = require('path');
+
 //bodyParser middleware so we can quickly get the body of the request
 const bodyParser = require('body-parser');
 

@@ -3,7 +3,7 @@ const express = require('express');
 const router = express.Router();
 
 //Database connection
-const db = require('../db.js');
+const db = require('../helpers/db.js');
 
 //bodyParser middleware so we can quickly get the body of the request
 const bodyParser = require('body-parser');
